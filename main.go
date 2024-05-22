@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+)
 
 type Celsius float64
 
@@ -9,7 +12,7 @@ func (c Celsius) cToF() Fahrenheit {
 }
 
 func (c Celsius) String() string {
-	return fmt.Sprintf("%v°C", c)
+	return fmt.Sprintf("%f°C", c)
 }
 
 type Fahrenheit float64
@@ -19,7 +22,7 @@ func (f Fahrenheit) fToC() Celsius {
 }
 
 func (f Fahrenheit) String() string {
-	return fmt.Sprintf("%v°F", f)
+	return fmt.Sprintf("%f°F", f)
 }
 
 type Feet float64
@@ -29,7 +32,7 @@ func (f Feet) fToM() Meter {
 }
 
 func (f Feet) String() string {
-	return fmt.Sprintf("%vf", f)
+	return fmt.Sprintf("%ff", f)
 }
 
 type Meter float64
@@ -39,7 +42,7 @@ func (m Meter) mToF() Feet {
 }
 
 func (m Meter) String() string {
-	return fmt.Sprintf("%vm", m)
+	return fmt.Sprintf("%fm", m)
 }
 
 type Pound float64
@@ -49,7 +52,7 @@ func (p Pound) pToK() Kilogram {
 }
 
 func (p Pound) String() string {
-	return fmt.Sprintf("%vlbs", p)
+	return fmt.Sprintf("%flbs", p)
 }
 
 type Kilogram float64
@@ -59,7 +62,7 @@ func (k Kilogram) kToP() Pound {
 }
 
 func (k Kilogram) String() string {
-	return fmt.Sprintf("%vKg", k)
+	return fmt.Sprintf("%fKg", k)
 }
 
 const (
@@ -69,4 +72,38 @@ const (
 )
 
 func main() {
+	valuePtr := flag.Float64("value", 0.0, "value")
+	poundToKgPtr := flag.Bool("ptk", false, "pound to kilogram")
+	kgToPound := flag.Bool("ktp", false, "kilogram to pound")
+	feetToMeter := flag.Bool("ftm", false, "feet to meter")
+	meterToFeet := flag.Bool("mtf", false, "meter to feet")
+	cToF := flag.Bool("ctf", false, "celsius to fahrenheit")
+	fToC := flag.Bool("ftc", false, "fahrenheit to celsius")
+
+	flag.Parse()
+
+	value := float64(*valuePtr)
+
+	fmt.Println("value:", value)
+
+	switch true {
+	case *poundToKgPtr:
+		p := Pound(value)
+		fmt.Println(p.pToK())
+	case *kgToPound:
+		k := Kilogram(value)
+		fmt.Println(k.kToP())
+	case *feetToMeter:
+		f := Feet(value)
+		fmt.Println(f.fToM())
+	case *meterToFeet:
+		m := Meter(value)
+		fmt.Println(m.mToF())
+	case *cToF:
+		c := Celsius(value)
+		fmt.Println(c.cToF())
+	case *fToC:
+		f := Fahrenheit(value)
+		fmt.Println(f.fToC())
+	}
 }
